@@ -14,7 +14,7 @@ Matrix AddMatrix(Matrix *a,Matrix *b);
 Matrix SubtractMatrix(Matrix *a, Matrix *b);
 void PrintMatrix(Matrix *m);
 void CopyMatrix(Matrix *a, Matrix *b,int lb,int rb,int db,int ub);
-
+void AcceptMatrix(Matrix *m);
 void main()
 {
 	Matrix A,B;
@@ -25,6 +25,10 @@ void main()
 	scanf("%d%d",&r2,&c2);
 	InitMatrix(&A,r1,c1,0);
 	InitMatrix(&B,r2,c2,0);
+	printf("Give Matrix A : ");
+	AcceptMatrix(&A);
+	printf("Give matrix B : ");
+	AcceptMatrix(&B);
 	printf("\nMatrix A : ");
 	PrintMatrix(&A);
 	printf("\nMatrix B : ");
@@ -72,10 +76,23 @@ void Strassen(Matrix *A, Matrix *B)
 	InitMatrix(&g,   B->rows-secondRowDiv,              secondColDiv, 0);
 	InitMatrix(&h,   B->rows-secondRowDiv,   B->columns-secondColDiv,	0);
 	
-	CopyMatrix(A,&a,1,firstRowDiv,1,firstColDiv);
-	CopyMatrix(A,&b,1,firstRowDiv,A->columns-firstColDiv,A->columns);
-	CopyMatrix(A,&c,firstRowDiv+1,0,firstColDiv-1);
+	CopyMatrix(A,&a,             1, firstRowDiv,             1,  firstColDiv);
+	CopyMatrix(A,&b,             1, firstRowDiv, firstColDiv+1,   A->columns);
+	CopyMatrix(A,&c, firstRowDiv+1,     A->rows,             1,  firstColDiv);
+	CopyMatrix(A,&d, firstRowDiv+1,     A->rows, firstColDiv+1,   A->columns);
+	CopyMatrix(B,&e,             1,secondRowDiv,             1, secondColDiv);
+	CopyMatrix(B,&f,             1,secondRowDiv,secondColDiv+1,   B->columns);
+	CopyMatrix(B,&g,secondRowDiv+1,     B->rows,             1, secondColDiv);
+	CopyMatrix(B,&h,secondRowDiv+1,     B->rows,secondColDiv+1,   B->columns);
+	
 	PrintMatrix(&a);
+	PrintMatrix(&b);
+	PrintMatrix(&c);
+	PrintMatrix(&d);
+	PrintMatrix(&e);
+	PrintMatrix(&f);
+	PrintMatrix(&g);
+	PrintMatrix(&h);
 }
 
 Matrix AddMatrix(Matrix *a,Matrix *b)
@@ -103,6 +120,7 @@ Matrix SubtractMatrix(Matrix *a, Matrix *b)
 void PrintMatrix(Matrix *m)
 {
 	int i,j;
+	printf("\n");
 	for(i=0;i<m->rows;i++)
 	{
 		printf("\n");
@@ -113,6 +131,10 @@ void PrintMatrix(Matrix *m)
 
 void CopyMatrix(Matrix *a, Matrix *b,int lb,int rb,int db,int ub)
 {
+	lb--;
+	rb--;
+	db--;
+	ub--;
 	int i,j;
 	for(i=lb;i<=rb;i++)
 		for(j=ub;j<=db;j++)
